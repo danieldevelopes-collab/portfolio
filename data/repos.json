@@ -8,23 +8,23 @@
   "siteUrl": "https://danieldevelopes-portfolio.web.app",
   "repos": [
     {
-      "slug": "spatialwave",
-      "name": "SpatialWave",
+      "slug": "thinkless",
+      "name": "Thinkless",
       "tagline": "A spatial productivity system — your project becomes a navigable map, and a deterministic Momentum Path shows the best next route through the work.",
-      "summary": "Not a board, list, or calendar. Goals, tasks, blockers, milestones and decisions live as connected nodes on a zoomable canvas, and the app continuously computes where to go next. The differentiator is momentum-based navigation: most tools show what exists; SpatialWave shows where work is blocked and the highest-leverage next step — with no AI, just a graph algorithm running client-side. Built with React + TypeScript + React Flow, and designed read-light for Firebase's free Spark plan.",
+      "summary": "Not a board, list, or calendar. Goals, tasks, blockers, milestones and decisions live as connected nodes on a zoomable canvas, and the app continuously computes where to go next. The differentiator is momentum-based navigation: most tools show what exists; Thinkless shows where work is blocked and the highest-leverage next step — with no AI, just a graph algorithm running client-side. Built with React + TypeScript + React Flow, and designed read-light for Firebase's free Spark plan.",
       "language": "TypeScript",
       "accent": "#6ea8fe",
       "tags": ["React", "TypeScript", "React Flow", "Firebase", "Graph engine"],
-      "repoUrl": "https://github.com/danieldevelopes-collab/spatialwave",
+      "repoUrl": "https://github.com/danieldevelopes-collab/thinkless",
       "platform": "Web — runs live in your browser",
       "screenshots": [
         { "src": "docs/cover.svg", "alt": "A spatial map of project nodes with a highlighted momentum path" }
       ],
       "live": {
         "type": "external",
-        "url": "https://danieldevelopes-spatialwave.web.app",
+        "url": "https://danieldevelopes-thinkless.web.app",
         "frameHeight": "min(82vh, 860px)",
-        "note": "The live <b>SpatialWave</b> app — the guest demo, running right here in the page. Drag nodes, connect dependencies, and toggle <b>Focus</b> to see the Momentum Path."
+        "note": "The live <b>Thinkless</b> app — the guest demo, running right here in the page. Drag nodes, connect dependencies, and toggle <b>Focus</b> to see the Momentum Path."
       },
       "howItWorks": [
         "Your work is a graph: goals, tasks, blockers, milestones and decisions are nodes; directed links declare what must happen before what.",
@@ -34,8 +34,8 @@
         "Spark-safe by design: the whole workspace persists as one Firestore document (load = 1 read, save = 1 debounced write) in Phase 2."
       ],
       "run": [
-        { "label": "Try it live (no sign-in)", "code": "open https://danieldevelopes-spatialwave.web.app" },
-        { "label": "Run locally", "code": "git clone https://github.com/danieldevelopes-collab/spatialwave && cd spatialwave && npm install && npm run dev" },
+        { "label": "Try it live (no sign-in)", "code": "open https://danieldevelopes-thinkless.web.app" },
+        { "label": "Run locally", "code": "git clone https://github.com/danieldevelopes-collab/thinkless && cd thinkless && npm install && npm run dev" },
         { "label": "Test the engine", "code": "npm test   # 14 tests over the graph + momentum logic" }
       ]
     },
