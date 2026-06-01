@@ -80,8 +80,9 @@ function main() {
       }
     }
 
-    // live app -> dist/apps/<slug>/ (verbatim)
-    if (repo.live) {
+    // live app -> dist/apps/<slug>/ (verbatim). External live embeds (an app
+    // hosted elsewhere and iframed in) are not vendored.
+    if (repo.live && repo.live.type !== "external") {
       const appDir = path.join(DIST, "apps", repo.slug);
       fs.mkdirSync(appDir, { recursive: true });
       for (const inc of repo.live.include) {

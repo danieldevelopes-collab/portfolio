@@ -32,7 +32,7 @@ for (const r of site.repos) {
       fail(`[manifest] ${r.slug || "?"}: missing "${f}"`);
   }
   if (/TODO/.test(JSON.stringify(r))) fail(`[manifest] ${r.slug}: contains a TODO placeholder — fill it in before shipping`);
-  if (r.live) {
+  if (r.live && r.live.type !== "external") {
     if (!r.live.entry) fail(`[live] ${r.slug}: live.entry missing`);
     else if (!fs.existsSync(path.join(DIST, "apps", r.slug, r.live.entry)))
       fail(`[live] ${r.slug}: vendored entry missing at apps/${r.slug}/${r.live.entry}`);

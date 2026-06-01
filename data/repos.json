@@ -8,6 +8,38 @@
   "siteUrl": "https://danieldevelopes-portfolio.web.app",
   "repos": [
     {
+      "slug": "spatialwave",
+      "name": "SpatialWave",
+      "tagline": "A spatial productivity system — your project becomes a navigable map, and a deterministic Momentum Path shows the best next route through the work.",
+      "summary": "Not a board, list, or calendar. Goals, tasks, blockers, milestones and decisions live as connected nodes on a zoomable canvas, and the app continuously computes where to go next. The differentiator is momentum-based navigation: most tools show what exists; SpatialWave shows where work is blocked and the highest-leverage next step — with no AI, just a graph algorithm running client-side. Built with React + TypeScript + React Flow, and designed read-light for Firebase's free Spark plan.",
+      "language": "TypeScript",
+      "accent": "#6ea8fe",
+      "tags": ["React", "TypeScript", "React Flow", "Firebase", "Graph engine"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/spatialwave",
+      "platform": "Web — runs live in your browser",
+      "screenshots": [
+        { "src": "docs/cover.svg", "alt": "A spatial map of project nodes with a highlighted momentum path" }
+      ],
+      "live": {
+        "type": "external",
+        "url": "https://danieldevelopes-spatialwave.web.app",
+        "frameHeight": "min(82vh, 860px)",
+        "note": "The live <b>SpatialWave</b> app — the guest demo, running right here in the page. Drag nodes, connect dependencies, and toggle <b>Focus</b> to see the Momentum Path."
+      },
+      "howItWorks": [
+        "Your work is a graph: goals, tasks, blockers, milestones and decisions are nodes; directed links declare what must happen before what.",
+        "The Momentum Path engine scores every actionable node by priority × deadline pressure × leverage (how much it unblocks), then greedily simulates completion to produce an ordered route: do this, which unlocks that.",
+        "All of that is pure, dependency-free logic in src/lib — the path, the blocked set, and cycle detection — covered by a Vitest suite, independent of any pixels.",
+        "React Flow renders the canvas from a single Zustand store; Focus mode dims everything off-path; completing a node ripples a wave to its dependents.",
+        "Spark-safe by design: the whole workspace persists as one Firestore document (load = 1 read, save = 1 debounced write) in Phase 2."
+      ],
+      "run": [
+        { "label": "Try it live (no sign-in)", "code": "open https://danieldevelopes-spatialwave.web.app" },
+        { "label": "Run locally", "code": "git clone https://github.com/danieldevelopes-collab/spatialwave && cd spatialwave && npm install && npm run dev" },
+        { "label": "Test the engine", "code": "npm test   # 14 tests over the graph + momentum logic" }
+      ]
+    },
+    {
       "slug": "brick-innit",
       "name": "brick-innit",
       "tagline": "One engine. Five brick-breakers — each one breaks a rule the genre spent fifty years assuming you couldn't.",

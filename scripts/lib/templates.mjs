@@ -167,8 +167,20 @@ function card(repo) {
 export function detailPage(repo, site) {
   const accent = repo.accent;
   const liveUrl = repo.live
-    ? `/apps/${repo.slug}/${repo.live.entry === "index.html" ? "" : repo.live.entry}`
+    ? repo.live.type === "external"
+      ? repo.live.url
+      : `/apps/${repo.slug}/${repo.live.entry === "index.html" ? "" : repo.live.entry}`
     : null;
+  const liveLabel = repo.live
+    ? repo.live.type === "external"
+      ? repo.live.url.replace(/^https?:\/\//, "")
+      : `/apps/${repo.slug}/`
+    : "";
+  const frameH = repo.live && repo.live.frameHeight ? repo.live.frameHeight : "clamp(460px,72vh,720px)";
+  const liveNote =
+    repo.live && repo.live.note
+      ? repo.live.note
+      : `This is the live <b>${escapeHtml(repo.name)}</b> app, running right here in the page.`;
 
   const actions = [
     `<a class="btn" href="${escapeHtml(repo.repoUrl)}" target="_blank" rel="noopener">${GH_ICON} View source</a>`,
@@ -186,12 +198,12 @@ export function detailPage(repo, site) {
     <div class="frame-wrap">
       <div class="frame-bar">
         <span class="dots"><i></i><i></i><i></i></span>
-        <span class="label">/apps/${repo.slug}/</span>
+        <span class="label">${escapeHtml(liveLabel)}</span>
         <a class="open" href="${liveUrl}" target="_blank" rel="noopener">Open full screen ↗</a>
       </div>
-      <iframe src="${liveUrl}" title="${escapeHtml(repo.name)} — live" loading="lazy" style="height:clamp(460px,72vh,720px)"></iframe>
+      <iframe src="${liveUrl}" title="${escapeHtml(repo.name)} — live" loading="lazy" style="height:${frameH}"></iframe>
     </div>
-    <p class="live-note">This is the actual <b>${escapeHtml(repo.name)}</b> repo, unmodified, running in your browser. Pick a mode and play.</p>
+    <p class="live-note">${liveNote}</p>
   </section>`;
   } else if (repo.screenshots && repo.screenshots.length) {
     visual = `<section class="wrap"><div class="gallery">` +
