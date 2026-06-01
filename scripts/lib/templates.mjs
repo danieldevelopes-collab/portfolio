@@ -143,7 +143,7 @@ function card(repo) {
     ? `<img src="/assets/shots/${repo.slug}/${shot.file}" alt="${escapeHtml(shot.alt || repo.name)}" loading="lazy">`
     : "";
   return `      <article class="card" style="--accent:${escapeHtml(repo.accent)}" data-search="${escapeHtml(search)}">
-        <a class="stretch" href="/${repo.slug}" aria-label="${escapeHtml(repo.name)} — view project"></a>
+        <a class="stretch" href="/${repo.slug}/" aria-label="${escapeHtml(repo.name)} — view project"></a>
         <span class="accent-bar"></span>
         <div class="shot">${badge}${img}</div>
         <div class="body">
