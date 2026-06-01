@@ -6,6 +6,8 @@
   "description": "A living portfolio that documents every public repo and runs the web ones live. Manifest-driven static site, free-tier hostable.",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate.mjs",
+    "ci": "node scripts/build.mjs && node scripts/validate.mjs",
     "sync": "node scripts/sync.mjs",
     "serve": "node scripts/serve.mjs",
     "dev": "node scripts/build.mjs && node scripts/serve.mjs",

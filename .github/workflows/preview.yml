@@ -1,26 +1,25 @@
-name: Deploy (live)
+name: PR Preview
 
-# The pipeline: every push to main rebuilds the portfolio from the manifest
-# (cloning each source repo fresh, so live apps + screenshots are always current)
-# and deploys the static site to Firebase Hosting.
+# Every pull request is built, validated, and deployed to its own temporary
+# Firebase Hosting preview channel. The action posts the preview URL as a PR
+# comment so changes can be reviewed live before merging.
 
 on:
-  push:
+  pull_request:
     branches: [main]
-  workflow_dispatch: {}
 
 permissions:
   contents: read
+  checks: write
+  pull-requests: write
 
 concurrency:
-  group: deploy-live
-  cancel-in-progress: false
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  deploy:
+  preview:
     runs-on: ubuntu-latest
-    # Skip the deploy step until a Firebase project + service account are configured,
-    # so the first pushes don't show a red "failed deploy".
     env:
       HAS_FIREBASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' && vars.FIREBASE_PROJECT_ID != '' }}
     steps:
@@ -30,19 +29,17 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # Builds dist/. The build shallow-clones each public repo in the manifest,
-      # so no secrets are needed for this step.
       - name: Build
         run: npm run build
 
       - name: Validate output
         run: npm run validate
 
-      - name: Deploy to Firebase Hosting
+      - name: Deploy preview channel
         if: env.HAS_FIREBASE == 'true'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: ${{ vars.FIREBASE_PROJECT_ID }}
-          channelId: live
+          expires: 7d

@@ -38,6 +38,19 @@ function copyInto(src, destDir) {
   fs.cpSync(src, path.join(destDir, path.basename(src)), { recursive: true });
 }
 
+function writeSeo(site) {
+  const base = (site.siteUrl || "").replace(/\/$/, "");
+  const urls = ["/", ...site.repos.map((r) => `/${r.slug}/`)];
+  const today = new Date().toISOString().slice(0, 10);
+  const xml =
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.map((u) => `  <url><loc>${base}${u}</loc><lastmod>${today}</lastmod></url>`).join("\n") +
+    `\n</urlset>\n`;
+  fs.writeFileSync(path.join(DIST, "sitemap.xml"), xml);
+  fs.writeFileSync(path.join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`);
+}
+
 function main() {
   const site = JSON.parse(fs.readFileSync(path.join(ROOT, "data/repos.json"), "utf8"));
 
@@ -89,6 +102,9 @@ function main() {
   fs.writeFileSync(path.join(DIST, "index.html"), landingPage(site));
   // simple 404 -> reuse landing
   fs.writeFileSync(path.join(DIST, "404.html"), landingPage(site));
+
+  // SEO: robots.txt + sitemap.xml
+  writeSeo(site);
 
   console.log(`\n✓ built ${site.repos.length} projects → dist/`);
 }

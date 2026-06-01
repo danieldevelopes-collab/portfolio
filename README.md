@@ -1,5 +1,11 @@
 # portfolio
 
+[![Deploy (live)](https://github.com/danieldevelopes-collab/portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/danieldevelopes-collab/portfolio/actions/workflows/deploy.yml)
+[![PR Preview](https://github.com/danieldevelopes-collab/portfolio/actions/workflows/preview.yml/badge.svg)](https://github.com/danieldevelopes-collab/portfolio/actions/workflows/preview.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**▶ Live: [danieldevelopes-portfolio.web.app](https://danieldevelopes-portfolio.web.app)**
+
 A single, public repository that hosts a **living portfolio** of every project I build.
 Every repo gets a polished page — what it is, how it works, how to run it — and the
 projects that run in a browser are **embedded live, unmodified**. New projects are added
@@ -90,8 +96,13 @@ firebase deploy --only hosting
 
 ### Automated deploys (CI)
 
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) rebuilds and deploys on
-every push to `main`. It needs two repository settings (Settings → Secrets and variables → Actions):
+Two workflows drive CI/CD — both run `npm run build` + `npm run validate` first, so a
+broken build never deploys:
+
+- [`deploy.yml`](.github/workflows/deploy.yml) — on push to `main`, deploys to the **live** channel.
+- [`preview.yml`](.github/workflows/preview.yml) — on every PR, deploys to a throwaway **preview channel** (7-day expiry) and comments the URL on the PR.
+
+They need two repository settings (Settings → Secrets and variables → Actions):
 
 | Kind     | Name                       | Value |
 |----------|----------------------------|-------|
