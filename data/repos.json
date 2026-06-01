@@ -5,6 +5,7 @@
   "tagline": "A living portfolio. Every project documented — and the web ones running, right here in the page.",
   "intro": "Hand-built software, from a Rust spreadsheet engine to five rule-breaking arcade games. Each card below opens a full breakdown: what it is, how it works, and how to run it. Where a project runs in a browser, you can play with it live.",
   "githubUrl": "https://github.com/danieldevelopes-collab",
+  "siteUrl": "https://danieldevelopes-portfolio.web.app",
   "repos": [
     {
       "slug": "brick-innit",

@@ -47,7 +47,7 @@ function tagsHtml(tags = [], limit = 99) {
 
 // ---------- shared chrome ----------
 
-function head({ title, description, accent }) {
+function head({ title, description, accent, canonical, ogImage }) {
   const favicon =
     "data:image/svg+xml," +
     encodeURIComponent(
@@ -64,6 +64,8 @@ function head({ title, description, accent }) {
 <meta property="og:title" content="${escapeHtml(title)}">
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:type" content="website">
+${canonical ? `<link rel="canonical" href="${escapeHtml(canonical)}">\n<meta property="og:url" content="${escapeHtml(canonical)}">` : ""}
+${ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 <link rel="icon" href="${favicon}">
 <link rel="stylesheet" href="/assets/styles.css">
 </head>`;
@@ -127,6 +129,8 @@ ${siteFooter(site, repos.length)}
       title: site.siteTitle,
       description: site.intro,
       accent: "#6ea8fe",
+      canonical: site.siteUrl ? `${site.siteUrl}/` : undefined,
+      ogImage: (() => { const r = repos.find((x) => x.screenshots && x.screenshots[0] && x.screenshots[0].file); return r ? `${site.siteUrl}/assets/shots/${r.slug}/${r.screenshots[0].file}` : undefined; })(),
     }) + body
   );
 }
@@ -274,6 +278,8 @@ ${siteFooter(site, site.repos.length)}
       title: `${repo.name} — ${site.author}`,
       description: repo.tagline,
       accent,
+      canonical: site.siteUrl ? `${site.siteUrl}/${repo.slug}/` : undefined,
+      ogImage: (() => { const s = repo.screenshots && repo.screenshots[0]; return s && s.file ? `${site.siteUrl}/assets/shots/${repo.slug}/${s.file}` : undefined; })(),
     }) + body
   );
 }
