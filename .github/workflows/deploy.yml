@@ -1,0 +1,42 @@
+name: Build & Deploy
+
+# The pipeline: every push to main rebuilds the portfolio from the manifest
+# (cloning each source repo fresh, so live apps + screenshots are always current)
+# and deploys the static site to Firebase Hosting.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Skip the deploy step until a Firebase project + service account are configured,
+    # so the first pushes don't show a red "failed deploy".
+    env:
+      HAS_FIREBASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' && vars.FIREBASE_PROJECT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Builds dist/. The build shallow-clones each public repo in the manifest,
+      # so no secrets are needed for this step.
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Firebase Hosting
+        if: env.HAS_FIREBASE == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
+          channelId: live

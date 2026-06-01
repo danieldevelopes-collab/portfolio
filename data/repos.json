@@ -1,0 +1,150 @@
+{
+  "owner": "danieldevelopes-collab",
+  "author": "Daniel Bracher",
+  "siteTitle": "Daniel Bracher — Portfolio",
+  "tagline": "A living portfolio. Every project documented — and the web ones running, right here in the page.",
+  "intro": "Hand-built software, from a Rust spreadsheet engine to five rule-breaking arcade games. Each card below opens a full breakdown: what it is, how it works, and how to run it. Where a project runs in a browser, you can play with it live.",
+  "githubUrl": "https://github.com/danieldevelopes-collab",
+  "repos": [
+    {
+      "slug": "brick-innit",
+      "name": "brick-innit",
+      "tagline": "One engine. Five brick-breakers — each one breaks a rule the genre spent fifty years assuming you couldn't.",
+      "summary": "A brick-breaker is one of gaming's oldest forms. brick-innit is five of them sharing a single reusable engine, each built to break one assumption nobody questioned: the wall comes alive (Conway's Game of Life), the ball turns to light, gravity bends every shot, you take a single planned shot, or bricks only break on the beat. Vanilla HTML + JavaScript, no build step, 100% offline — every sound is synthesised live with the Web Audio API.",
+      "language": "JavaScript",
+      "accent": "#6ea8fe",
+      "tags": ["Vanilla JS", "Canvas", "Web Audio", "Zero-build", "100% offline"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/brick-innit",
+      "platform": "Web — runs live in your browser",
+      "screenshots": [
+        { "src": "docs/menu.png", "alt": "The brick-innit menu — five mode cards, each in its own accent colour" }
+      ],
+      "live": {
+        "type": "static",
+        "entry": "index.html",
+        "include": ["index.html", "main.js", "styles.css", "engine", "modes"],
+        "aspect": "3 / 2"
+      },
+      "howItWorks": [
+        "One reusable engine — Ball, Paddle, BrickGrid, circle-vs-rect collision, a particle field and a tiny Web-Audio Synth — composed five completely different ways.",
+        "Each game is a 'mode' implementing setup() / update(dt) / render(ctx) and registering itself; that single seam is why five wildly different games share ~600 lines of engine.",
+        "Plain classic-script JavaScript on a window.Brick namespace, so it runs straight from a file:// double-click — no modules, no bundler, no server.",
+        "A headless harness (node test/smoke.js) loads the engine and all five modes, running each through setup + 600 physics steps + a render to catch integration bugs."
+      ],
+      "run": [
+        { "label": "Play it instantly", "code": "open index.html   # just double-click — no install, no build" },
+        { "label": "Or serve the folder", "code": "python3 -m http.server   # then visit the printed URL" },
+        { "label": "Run the smoke test", "code": "node test/smoke.js" }
+      ]
+    },
+    {
+      "slug": "lattice",
+      "name": "lattice",
+      "tagline": "A spreadsheet, rebuilt from first principles in Rust — a fast sparse calc engine with Excel-accurate formulas and dependency-ordered recalculation.",
+      "summary": "lattice is a spreadsheet system written from scratch: the cell model, A1 addressing, a real formula language (lexer → parser → evaluator), a dependency graph that drives automatic recalculation, around sixty functions, and the file formats that let a workbook survive being closed. The calculation engine is pure Rust and knows nothing about pixels, so it is tested entirely on its own; on top sits a Tauri desktop app with a virtualized canvas grid that feels like the spreadsheets you already know.",
+      "language": "Rust",
+      "accent": "#2bd4a0",
+      "tags": ["Rust", "Tauri", "Calc engine", "XLSX / ODS / CSV", "Desktop app"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/lattice",
+      "platform": "Desktop — macOS · Linux · Windows (Tauri)",
+      "screenshots": [
+        { "src": "docs/grid.png", "alt": "The lattice spreadsheet grid with a formula bar and selection" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "sheet-core (pure Rust, no UI): the sparse Cell/Sheet/Workbook model, A1 addressing with $ markers, the value system, and the formula pipeline lexer → parser (precedence climbing) → AST → eval.",
+        "Excel-accurate to the quirks: -2^2 is 4, 2^3^2 is 64, IF / IFERROR are lazy, and the full error set (#DIV/0!, #VALUE!, #NAME?, …) propagates exactly as it should.",
+        "Dependency-ordered recalculation: extract each formula's precedents, topologically sort with Kahn's algorithm, recompute in order so every cell reads fresh inputs — with circular-reference detection.",
+        "sheet-io reads and writes real CSV, .xlsx, OpenDocument .ods and a native JSON format — genuine files other apps open without complaint.",
+        "A Tauri desktop shell draws a virtualized canvas grid: only the visible cells render, so scrolling a large sheet stays smooth."
+      ],
+      "run": [
+        { "label": "Run the desktop app", "code": "cargo tauri dev   # needs Rust + Tauri prerequisites" },
+        { "label": "Test the engine (no UI)", "code": "cargo test -p sheet-core" },
+        { "label": "Test the file interop", "code": "cargo test -p sheet-io" }
+      ]
+    },
+    {
+      "slug": "ferric",
+      "name": "ferric",
+      "tagline": "A word processor in the shape of a limited Microsoft Word — that exports real files you can open anywhere: .docx, .odt, and a paginated PDF.",
+      "summary": "Headings, fonts and sizes, bold/italic/underline, lists, alignment and live word counts — over a Word-style ribbon. The page you type on is glass; the machinery underneath is iron. ferric-core is pure Rust with no dependency on the UI: it owns the document model and every file-format conversion, and its exports are genuine files the OS recognises as PDF, OpenDocument Text and Microsoft Word 2007+ — not renamed look-alikes.",
+      "language": "Rust",
+      "accent": "#e0894e",
+      "tags": ["Rust", "Tauri", "Word processor", "DOCX / ODT / PDF", "Desktop app"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/ferric",
+      "platform": "Desktop — macOS · Linux · Windows (Tauri)",
+      "screenshots": [
+        { "src": "docs/ui.png", "alt": "The ferric word processor — a Word-style ribbon with font controls over a paper page" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "Three clean layers: ferric-core (pure-Rust engine — model + every format), a thin Tauri shell exposing four commands, and a web UI that is a Word-like ribbon over a contenteditable page.",
+        "The engine and UI exchange exactly one thing — a Document as JSON: paragraphs of styled runs. The UI never parses a file format; the engine never touches the DOM.",
+        "Exports are built in Rust: Office Open XML via docx-rs, OpenDocument XML zipped by hand, and a paginated PDF laid out with printpdf (word-wrapping, per-run fonts, headings, lists, page breaks).",
+        "Proof, not promises: the OS 'file' tool recognises each export, and a 12-test suite asserts the headers and round-trips on every build.",
+        "Print / Save-as-PDF uses the system print engine via the webview, so the printout is exactly the page you see."
+      ],
+      "run": [
+        { "label": "Run the desktop app", "code": "cargo tauri dev   # needs Rust + Tauri prerequisites" },
+        { "label": "Test the engine (no UI)", "code": "cargo test -p ferric-core" },
+        { "label": "Write sample files in every format", "code": "cargo run -p ferric-core --example export" }
+      ]
+    },
+    {
+      "slug": "omni-extract",
+      "name": "omni-extract",
+      "tagline": "Feed it any file — a scanned PDF, a phone photo of a receipt, a Word doc, an email, a zip of junk — and get back all the text it can recover. Fully offline.",
+      "summary": "\"Just get the text out of the file\" sounds like a one-liner; it is not. A .docx is a zip of XML, a PDF might be selectable text or just a photograph of a page, a .txt won't tell you its encoding, and a screenshot is only pixels until OCR reads it. omni-extract is several tools in a trench coat: a file-type detective that doesn't trust extensions, a router, a dozen extractors, a Tesseract OCR engine for the pixels, recursion for archives, and a normaliser. The core has zero third-party dependencies; nothing ever leaves your machine.",
+      "language": "Python",
+      "accent": "#b692ff",
+      "tags": ["Python", "Tesseract OCR", "Hybrid PDF", "100% offline", "CLI + local web UI"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/omni-extract",
+      "platform": "CLI + local browser UI — macOS · Linux · Windows · Docker",
+      "screenshots": [
+        { "src": "docs/screenshot-ui.png", "alt": "The omni-extract desktop interface — a drag-and-drop zone over a calm, Apple-style dark layout" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "The pipeline: file → DETECT → ROUTE → EXTRACT (with a fallback chain) → NORMALIZE → a uniform Document of text + metadata.",
+        "Detect by magic-byte signatures, then container sniffing for ambiguous cases (a PK\\x03\\x04 file could be docx/xlsx/pptx/epub/zip) — only the first 64 KB are read, so detection is O(1) even on a multi-gigabyte file.",
+        "The hybrid-PDF trick: read each page's embedded text first and send only the empty (scanned) pages to OCR — a 500-page digital PDF never wakes the OCR engine; a scanned one is fully recovered.",
+        "Everything except PDFs and image-OCR runs on the Python standard library alone; OCR is Tesseract's LSTM neural network, PDFs use PyMuPDF.",
+        "Built for scale: parallel batch across files, lazy imports, a content-hash cache, per-file timeouts and archive-bomb guards. Every result records which backend ran, so nothing is ever silently faked."
+      ],
+      "run": [
+        { "label": "See what's installed", "code": "python3 -m omniextract --capabilities" },
+        { "label": "Extract a file", "code": "omni-extract scan.pdf            # text on stdout" },
+        { "label": "Open the drag-and-drop web UI", "code": "omni-extract --serve            # opens in your browser" },
+        { "label": "Fully self-contained via Docker", "code": "docker build -t omni-extract . && docker run --rm -v \"$PWD:/data\" omni-extract scan.pdf" }
+      ]
+    },
+    {
+      "slug": "hello-world-showcase",
+      "name": "hello-world-showcase",
+      "tagline": "A full-screen wall of 41 programming languages all saying the same thing — running for real on your own machine. One button in the centre ends it all.",
+      "summary": "A small, honest demonstration. The controller runs each language's Hello World program once, captures the output it actually produced, and shows every result together on a single full-screen page. Languages whose runtime isn't installed are shown too — clearly marked 'runtime not installed' rather than faked. Pure Python 3, no third-party packages, on macOS, Linux and Windows. Click END PROJECT and the whole thing shuts down: server gone, browser window gone, temp files gone.",
+      "language": "Python",
+      "accent": "#f4b740",
+      "tags": ["Python", "41 languages", "Zero-dependency", "Cross-platform", "Subprocess isolation"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/hello-world-showcase",
+      "platform": "Local app — macOS · Linux · Windows",
+      "screenshots": [
+        { "src": "docs/screenshot.png", "alt": "A wall of programming languages each printing Hello World, with an END PROJECT button glowing in the centre" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "controller/languages.py is the registry — one Lang(...) entry per language with its source, build/run commands, required executables, timeout and a historical credit. Adding a language is a single entry.",
+        "controller/runner.py runs each language once in its own private temp dir, isolated as a process group, with a wall-clock timeout; on timeout the entire process tree is killed.",
+        "Results are collected in memory and rendered by controller/page.py into one self-contained HTML page — no external CSS, JS or network.",
+        "controller/server.py is a tiny localhost-only server with two routes: / returns the page, /exit triggers a clean shutdown that kills the browser, deletes the temp dir and stops the server.",
+        "Every tile is honest: 🟢 LIVE ran for real, 🟡 FAIL shows the error, ⚪ N/A means the runtime isn't installed — never faked."
+      ],
+      "run": [
+        { "label": "Run it (pure standard library)", "code": "git clone https://github.com/danieldevelopes-collab/hello-world-showcase.git && cd hello-world-showcase && python3 run.py" },
+        { "label": "See which languages will light up", "code": "python3 run.py --list" },
+        { "label": "Dry run — table, no browser", "code": "python3 run.py --dry-run" }
+      ]
+    }
+  ]
+}
