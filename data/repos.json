@@ -3,10 +3,37 @@
   "author": "Daniel Bracher",
   "siteTitle": "Daniel Bracher — Portfolio",
   "tagline": "A living portfolio. Every project documented — and the web ones running, right here in the page.",
-  "intro": "Hand-built software, from a Rust spreadsheet engine to five rule-breaking arcade games. Each card below opens a full breakdown: what it is, how it works, and how to run it. Where a project runs in a browser, you can play with it live.",
+  "intro": "Hand-built software — a universal quantum computer simulator and a modern SAT solver in a few hundred lines each, a spreadsheet engine and a word processor in Rust, a spatial productivity app, and five rule-breaking arcade games. Each card opens a full breakdown: what it is, how it works, and how to run it — and where a project runs in a browser, you can play with it live.",
   "githubUrl": "https://github.com/danieldevelopes-collab",
   "siteUrl": "https://danieldevelopes-portfolio.web.app",
   "repos": [
+    {
+      "slug": "psi",
+      "name": "psi",
+      "tagline": "A universal quantum computer simulator in under 1000 characters of Python — any gate on any qubits via one tensor contraction, running Grover's search, the QFT, and teleportation.",
+      "summary": "A quantum computer's state is a 2^n vector of complex amplitudes, and a gate is a unitary that must act on all of them at once. psi handles that in a single line: reshape the amplitudes into an n-axis tensor and contract the gate against exactly the qubits it touches. That one idea makes the whole simulator universal and under a kilobyte — 996 characters. On top of it run the real algorithms — Grover's quadratic-speedup search, the Quantum Fourier Transform (the engine of Shor's algorithm), quantum teleportation, and a quantum walk — every one validated against exact analytic results.",
+      "language": "Python",
+      "accent": "#b692ff",
+      "tags": ["Python", "NumPy", "Quantum computing", "< 1000 chars", "Algorithms"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/psi",
+      "platform": "Library + demos — macOS · Linux · Windows",
+      "screenshots": [
+        { "src": "docs/quantum_walk.png", "alt": "A quantum walk's ballistic two-peak interference pattern versus a classical random walk's narrow Gaussian" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "A quantum state is 2^n complex amplitudes; psi starts every register in |00...0>.",
+        "Any gate (a 2^k x 2^k unitary) is applied to any k qubits by a single tensor contraction — reshape the gate, tensordot its input axes against the chosen qubit axes, move the outputs back. That one universal method is the entire engine.",
+        "The standard gates (H, X, Y, Z, S, T, CNOT, phase) are their textbook matrices; measurement samples |amplitude|^2.",
+        "On top run real algorithms: Grover finds a needle in 4096 with 99.99% probability in 50 steps; the QFT (Shor's engine) matches the classical DFT exactly; teleportation reconstructs a qubit with fidelity 1.",
+        "Validated, not asserted: pytest checks unitarity, normalisation over 300 random circuits, Grover's exact probability, QFT vs DFT, and teleportation fidelity."
+      ],
+      "run": [
+        { "label": "Run the algorithm demos", "code": "python algorithms.py     # Bell, Grover, QFT, teleportation" },
+        { "label": "Render the quantum walk", "code": "python quantum_walk.py" },
+        { "label": "Validate against exact results", "code": "pip install numpy pytest && pytest -v" }
+      ]
+    },
     {
       "slug": "satori",
       "name": "satori",
