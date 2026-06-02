@@ -8,6 +8,33 @@
   "siteUrl": "https://danieldevelopes-portfolio.web.app",
   "repos": [
     {
+      "slug": "satori",
+      "name": "satori",
+      "tagline": "A modern CDCL SAT solver in ~550 lines of Rust — conflict-driven clause learning, watched literals, VSIDS, and the algorithm that verifies every CPU.",
+      "summary": "Boolean satisfiability was the first problem ever proved NP-complete — the canonical \"impossible\" problem. satori solves it with the architecture every competitive solver has shared since MiniSat: two-watched-literals unit propagation, 1-UIP conflict analysis that learns a new clause from every dead end, non-chronological backjumping, VSIDS branching, and Luby restarts. Zero dependencies, pure std — and validated by differential-testing against a brute-force oracle on thousands of random formulas plus pigeonhole UNSAT proofs.",
+      "language": "Rust",
+      "accent": "#39d98a",
+      "tags": ["Rust", "SAT / CDCL", "Zero-dependency", "Algorithms", "CLI"],
+      "repoUrl": "https://github.com/danieldevelopes-collab/satori",
+      "platform": "CLI / library — macOS · Linux · Windows",
+      "screenshots": [
+        { "src": "docs/cover.svg", "alt": "satori — a CNF formula, an implication graph, and a SATISFIABLE verdict" }
+      ],
+      "live": null,
+      "howItWorks": [
+        "Two-watched-literals unit propagation: each clause watches only two of its literals and is re-examined only when one becomes false — so propagation touches almost no memory, the key reason modern solvers are fast.",
+        "1-UIP conflict analysis: on a contradiction, walk the implication graph back to the first unique implication point and learn a new clause that forbids the search from ever repeating that mistake.",
+        "Non-chronological backjumping: the learnt clause says exactly how far to jump back, often skipping huge regions of the search tree.",
+        "VSIDS branching steers toward the conflict-heavy core of the problem; Luby restarts escape early bad decisions while keeping everything learnt.",
+        "Validated, not asserted: 4,000 random formulas are solved twice — by satori and by brute force — and required to agree, with every SAT model checked against its clauses."
+      ],
+      "run": [
+        { "label": "Solve a DIMACS CNF", "code": "satori formula.cnf      # or:  satori < formula.cnf" },
+        { "label": "Build from source", "code": "git clone https://github.com/danieldevelopes-collab/satori && cd satori && cargo build --release" },
+        { "label": "Run the validation suite", "code": "cargo test --release    # 4,000-formula oracle + pigeonhole proofs" }
+      ]
+    },
+    {
       "slug": "thinkless",
       "name": "Thinkless",
       "tagline": "A spatial productivity system — your project becomes a navigable map, and a deterministic Momentum Path shows the best next route through the work.",
